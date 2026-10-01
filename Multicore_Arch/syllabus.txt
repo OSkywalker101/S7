@@ -1,0 +1,72 @@
+Course Contents
+Unit I
+Introduction to Multi-Core Architecture: Motivation for Concurrency in Software, Parallel
+Computing Platforms, Parallel Computing in Microprocessors, Differentiating Multi-Core Architectures
+from Hyper- Threading Technology, Multi-Threading on Single-Core Versus Multi-Core Platforms
+Understanding Performance, Amdahl’s Law, Growing Returns: Gustafson’s Law. System.
+Overview of Threading: Defining Threads, System View of Threads, Threading Above the Operating
+System, Threads Inside The OS, Threads Inside the Hardware, What Happens When A Thread Is
+Created, Application Programming Models and Threading, Virtual Environment: VMs And Platforms,
+Runtime Virtualization, System Virtualization.
+● Pedagogy: Interactive Lecture
+● Link: https://www.academia.edu/33065897/MULTI_CORE_ARCHITECTURES_AND_PROGRAMMING
+Unit II
+Fundamental Concepts of Parallel Programming: Designing for Threads, Task Decomposition, Data
+Decomposition, Data Flow Decomposition, Implications of Different Decompositions, Challenges
+You’ll Face, Parallel Programming Patterns, A Motivating Problem: Error Diffusion, Analysis of The
+Error Diffusion Algorithm, Alternate Approach: Parallel Error Diffusion, Other Alternatives.
+● Pedagogy: Core concepts and theoretical concepts PPT
+● Link: https://www.academia.edu/33065897/MULTI_CORE_ARCHITECTURES_AND_PROGRAMMING
+Unit III
+Threading and Parallel Programming Constructs: Synchronization, Critical Sections, Deadlock,
+Synchronization Primitives, Semaphores, Locks, Condition Variables, Messages, Flow Control- Based
+Concepts, Fence, Barrier, Implementation-Dependent Threading Features. Threading API’s: Threading
+API’s For Microsoft Windows, Win32/MFC Thread API’s, Threading API’s For Microsoft. NET
+Framework, Creating Threads, Managing Threads, Thread Pools, Thread Synchronization, POSIX
+Threads, Creating Threads, Managing Threads, Thread Synchronization, Signalling, Compilation and
+Linking.
+● Pedagogy: Coding, Lab Hands-on Exercises
+● Link: https://www.academia.edu/33065897/MULTI_CORE_ARCHITECTURES_AND_PROGRAMMING
+MULTICORE ARCHITECTURE AND PROGRAMMING
+Course Code: CI71 Credits: 3:0:1
+Prerequisite: Nil Contact Hours: 42L+14P
+Course Coordinator: Dr. Mohana Kumar S
+25
+Unit IV
+Open MP: A Portable Solution For Threading: Challenges In Threading A Loop, Loop-Carried
+Dependence, Data-Race Conditions, Managing Shared And Private Data, Loop Scheduling And
+Portioning, Effective Use Of Reductions, Minimizing Threading Overhead, Work-Sharing Sections,
+Performance-Oriented Programming, Using Barrier And No Wait, Interleaving Single-Thread And
+Multi-Thread Execution, Data Copy-In And Copy-Out, Protecting Updates Of Shared Variables, Intel
+Task Queuing Extension to Open MP, OpenMP Library Functions, OpenMP Environment Variables,
+Compilation, Debugging, Performance.
+● Pedagogy: Demo, Case Study
+● Link: https://www.academia.edu/33065897/MULTI_CORE_ARCHITECTURES_AND_PROGRAMMING
+Unit V
+Solutions To Common Parallel Programming Problems: Too Many Threads, Data Races, Deadlocks,
+And Live Locks, Deadlock, Heavily Contended Locks, Priority Inversion, Solutions For Heavily
+Contended Locks, Non-Blocking Algorithms, ABA Problem, Cache Line Ping-Ponging, Memory
+Reclamation Problem, Recommendations, Thread-Safe Functions And Libraries, Memory Issues,
+Bandwidth, Working In The Cache, Memory Contention, Cache-Related Issues, False Sharing, Memory
+Consistency, Current IA-32 Architecture, Itanium Architecture, High-Level Languages, Avoiding
+Pipeline Stalls On IA-32,Data Organization For High Performance.
+● Pedagogy: Demo, Case Study
+● Link: https://www.academia.edu/33065897/MULTI_CORE_ARCHITECTURES_AND_PROGRAMMING
+Text Books:
+1. Multicore Programming, Increased Performance through Software Multi-threading by Shameem
+Akhter and Jason Roberts, Intel Press, 2006
+2. Hennessey and Patterson: “Computer Architecture A Quantitative Approach”, 4th Edition, Elsevier,
+2012.
+Reference Book:
+1. Kai Hwang, Naresh Jotwani: Advanced Computer Architecture - Parallelism, Scalability,
+Programmability, 2nd Edition, Tata McGraw Hill, 2011.
+Course Outcomes (COs):
+At the end of the course, the student will be able to:
+1. Understand the concepts of parallel programming, Amdahl's law and threading. (PO1,2,3,5 PSO1)
+2. Describe the challenges involved in designing multi threaded applications. (PO1,2,3,5 PSO1)
+3. Apply OpenMP directives and techniques to develop parallel programs by managing threads.
+(PO1,2,3,5 PSO1)
+4. Analyze synchronization , deadlock and memory related issues with respect to parallel processing.
+(PO1,2,3,5 PSO1)
+5. Design and develop multithreaded applications to exploit multicore architecture. (PO1,2,
+3,5,PSO1)

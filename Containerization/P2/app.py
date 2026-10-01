@@ -1,0 +1,6 @@
+val1 = float(input("Enter first value"))
+val2 = float(input("Enter second value"))
+print(f"{val1 + val2}")
+print(f"{val1 - val2}")
+print(f"{val1 * val2}")
+print(f"{val1 / val2}")

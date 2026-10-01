@@ -1,0 +1,52 @@
+AI ETHICS AND SUSTAINABILITY
+Course Code: CIE734 Credits: 3:0:0
+Pre – requisites: Nil Contact Hours: 42L
+Course Coordinator: Dr. Rakesh Kalshetty
+Course Contents
+Unit 1
+Foundations of Artificial Intelligence and Ethics: Introduction to artificial intelligence and intelligent
+systems; motivation for responsible artificial intelligence; foundations of AI; background of AI;
+autonomy; adaptability; interaction.
+● Pedagogy: Interactive Lectures and Classroom Discussions, Concepts based learning through
+PPTs.
+● Link: https://www.sciencedirect.com/science/article/abs/pii/S3050790125000075
+Unit II
+Ethical Decision-Making, Responsibility and Design for Values: Ethical decision-making in AI;
+ethical theories; values; ethics in practice; implementing ethical reasoning; responsible research and
+innovation; accountability; responsibility; transparency; and design for values.
+● Pedagogy: Interactive Lectures and Classroom Discussions, Concepts based learning through
+PPTs.
+● Link: https://onlinecourses.nptel.ac.in/e-learning/preview/noc26_cs145
+Unit III
+Trustworthy AI, Alignment, Moral Machines and Long-Term Ethics: Ethical action in AI systems;
+approaches to ethical reasoning by AI; designing artificial moral agents; levels of ethical behavior;
+ethical status of AI systems.
+● Pedagogy: Interactive Lectures and Classroom Discussions, Concepts based learning through
+PPTs.
+● Link: https://www.coursera.org/learn/ai-ethics-and-policy
+Unit IV
+Governance and Responsible AI in Practice: Ensuring Responsible AI in Practice; Governance for
+Responsible AI; Codes of Conduct; Inclusion and Diversity; The AI Narrative.
+● Pedagogy: Interactive Lectures and Classroom Discussions, Concepts based learning through
+PPTs, Case Study, Demo and Student Presentation.
+● Link: https://link.springer.com/article/10.1007/s00146-026-02910-4
+25
+Unit V
+AI, Society and Socio-Economic Impacts: AI and society; broader societal implications of AI; superintelligence; responsible AI in the social context; socio-economic impacts of AI; and public policy issues
+related to advanced AI systems.
+● Pedagogy: Interactive Lectures and Classroom Discussions, Concepts based learning through
+PPTs, Case Study, Demo and Student Presentation.
+● Link: https://nptel.ac.in/courses/109106184
+Text Books
+1. Responsible Artificial Intelligence – Virginia Dignum, Springer, 2019.
+2. Ethics of Artificial Intelligence – S. Matthew Liao, Oxford University Press, 2020.
+Course Outcomes (COs):
+At the end of the course, the student will be able to:
+1. Understand the foundations of artificial intelligence and the need for ethical and responsible AI
+systems.(PO-1,2,3,5,PSO-1,2)
+2. Analyze ethical theories, values, responsibility, fairness, accountability, and privacy in AI design
+and deployment. (PO-1,2,3,5,PSO-1,2)
+3. Examine governance, codes of conduct, inclusion, and responsible AI practices in real-world
+systems. (PO-1,2,3,5,PSO-1,2,3)
+4. Evaluate the societal and socio-economic implications of AI technologies. (PO-1,2,3,PSO-1,2,3)
+5. Explore trustworthy AI, alignment, moral machines, and long-term ethical challenges in AI. (PO1,2,3,4,PSO-1,2,3)

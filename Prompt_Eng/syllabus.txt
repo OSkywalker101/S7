@@ -1,0 +1,78 @@
+Course Contents
+Unit 1
+Generative AI: Definition and Fundamentals, History and Evolution from AI to Generative AI,
+Traditional AI to Generative AI, Autoencoders: The Information Bottleneck, Latent Variables,
+Autoencoder Architecture, Types of Autoencoders. GAN: The Generative Model, The Discriminative
+Model. Attention Models: Encoder-Decoder Paradigm, Attention to Sequence Models. Transformers:
+Encoder Layer, Positional Encoding, Residual Connections, Decoder Layer, Linear Layer and SoftMax,
+Training, Inference, Loss Function.
+● Pedagogy: Demonstration of attention mechanism
+● Link:https://github.com/soloshun/llm-from-scratch/blob/master/src/part06_attention_mechanism.py
+Unit II
+LLM, Text Representation and GPT Models: Large Language Models: Introduction to Large
+Language Models (LLMs), What Are LLMs, Applications of LLMs, How LLMs See the World:
+Hallucinations, How LLMs Process Text, LLM Tokenization, How Tokenizers Prepare Inputs to the
+Language Model, How Does the Tokenizer Break Down Text, Word vs. Subword vs. Character vs. Byte
+Tokens, Comparing Trained LLM Tokenizers, Tokenizer Properties, Token Embeddings, Text
+Embeddings, Word Embeddings
+● Pedagogy: Demonstration of LLM, Applications
+● Link: https://github.com/rasbt/LLMs-from-scratch/tree/main/ch04
+Unit III
+Prompt Engineering: Introduction to Prompt Engineering , The Basic Ingredients of a Prompt ,
+Instruction-Based Prompting , Advanced Prompt Engineering , The Potential Complexity of a Prompt ,
+In-Context Learning: Providing Examples , Chain Prompting: Breaking up the Problem , Reasoning with
+Generative Models , Chain-of-Thought: Think Before Answering , Self-Consistency: Sampling Outputs,
+Tree-of-Thought: Exploring Intermediate Steps , Output Verification , Providing Examples , Grammar:
+Constrained Sampling. Prompt design and Optimization.
+● Pedagogy: Experiment with prompts
+PROMPT ENGINEERING FOR GENERATIVE AI
+Course Code: CI72 Credits: 2:1:0
+Prerequisite: Nil Contact Hours: 28L+14T
+Course Coordinator: Dr. A N Ramya Shree, Dr. Nithya N
+25
+● Link: https://www.promptingguide.ai/introduction/basics
+Unit IV
+LangChain: Introduction to LangChain, Chat Models,Streaming Chat Models,Creating Multiple LLM
+Generations ,LangChain Prompt Templates ,LangChain Expression Language (LCEL),Using
+PromptTemplate with Chat Models,Output Parsers, LangChain Evals,OpenAI Function Calling ,Parallel
+Function Calling, Function Calling in LangChain, Extracting Data with LangChain ,Query
+Planning,Creating Few-Shot Prompt Templates, Limitations with Few-Shot Examples,Saving and
+Loading LLM Prompts, Prompt Chaining, Reasoning with language agents.
+● Pedagogy: Demonstration of LangChain Applications
+● Link: https://github.com/benman1/generative_ai_with_langchain
+Unit V
+Retrieval Augmented Generation (RAG): Key Concepts and Components RAG, How It Improves
+Question Answering, RAG Architecture, Building the Retrieval System, Embeddings and Vector
+Databases for Retrieval in RAG, RAG Data Ingestion Pipeline, RAG Pipeline Implementation:
+Preprocessing PDF documents, Data Ingestion Pipeline Implementation, Generation Component
+Implementation, Impact of Text Splitting on RAG, Challenges of Retrieval-Augmented Generation.
+● Pedagogy: Building RAG application
+● Link:https://github.com/langchain-ai/rag-from-scratch/blob/main/rag_from_scratch_10_and_11.ipynb
+Text Books
+1. John Atkinson and Abutridy,Large Language Models Concepts, Techniques and
+Applications,CRC Press, 2025
+2. John Berryman and Albert Ziegler, Prompt Engineering for LLMs, The Art and Science of
+Building Large Language Model–Based Applications ,, O’Reilly,2025.
+3. James Phoenix and Mike Taylor, Prompt Engineering for Generative AI Future-Proof Inputs for
+Reliable AI Outputs at Scale, O’Reilly,2024.
+4. Alammar & Maarten Grootendorst , Hands-On Large Language Models Language Understanding
+and Generation ,Jay , O’Reilly,2024.
+5. Mehdi Allahyari, Angelina Yang , “A Practical Approach to Retrieval Augmented Generation
+Systems”, Maven, 2023.
+Course Outcomes (COs):
+At the end of the course, the student will be able to:
+1. Develop a comprehensive understanding of the fundamental concepts, architecture,
+tokenization mechanisms, embeddings, and operational principles of Large Language Models
+(LLMs). (PO-1,2,3,4,5,12, PSO-1,2).
+25
+2. Analyze the pre-processing techniques, token representations, embedding methods, and
+contextual language representations used in modern natural language processing systems.
+(PO-1,2,3,4,5 , PSO-1,2).
+3. Apply prompt engineering strategies and reasoning techniques to effectively control,
+optimize, and evaluate text generation using state-of-the-art generative language models. (PO1,2,3,4,5,6,12, PSO-1,2, 3).
+4. Design and develop LLM-based applications using Lang Chain by integrating prompt
+templates, function calling, document processing, retrieval mechanisms, and workflow
+orchestration. (PO-1,2,3,4,5,6, 12, PSO-1,2,3).
+5. Evaluate and implement fine-tuning methodologies, instruction tuning, few-shot learning,
+named-entity recognition, and performance evaluation techniques for adapting and assessing
+generative AI models. (PO-1,2,3,4,5,12 PSO-1,2,3)
