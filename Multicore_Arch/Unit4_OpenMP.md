@@ -1,244 +1,391 @@
-# Unit 4: OpenMP — Parallel Programming with Directives
+# Unit IV — OpenMP: A Portable Solution for Threading
 
-> Course: Multicore Architecture and Programming (CI71) | Source: `Multicore_Architecture.md` (lecture slides — OpenMP session)
-
----
-
-## 1. Introduction to OpenMP
-
-### 1.1 What is OpenMP?
-- **Open Multi-Processing** — an API supporting **portable shared-memory multiprocessing programming** for C/C++ **and** Fortran.
-- Standardized by the **OpenMP Architecture Review Board (ARB)**.
-- Consists of:
-  1. **Compiler directives** (`#pragma omp ...`) — the primary mechanism,
-  2. **Runtime library routines** (`omp_get_thread_num()` etc.),
-  3. **Environment variables** (`OMP_NUM_THREADS` etc.).
-- Modern versions: **OpenMP 2.5/3.0**, **4.x** (accelerators, SIMD, tasks), **5.x**.
-- Model: **fork–join**. A master thread forks a team of threads that each run the parallel region, then join back.
-
-### 1.2 The fork–join execution model
-```
-master ──┬────────────┐
-         │ fork       │
-         ├  worker 1  ├  <-- team each runs parallel region
-         ├  worker 2  ├
-         ├  worker 3  ├
-         ├  worker 4  ├
-master ──┴────────────┘  <-- join
-         (serial part)   (parallel region)   (serial part)
-```
-- **Serial part:** only the **master thread** runs (the default thread count = 1 for the initial region).
-- **Parallel region:** `#pragma omp parallel` creates a **team** of threads; each member executes the same code (SPMD) unless work-sharing constructs divide it.
-- At the end, **implicit barrier** = join → only master continues.
-
-### 1.3 Execution modes — "Single Program Multiple Data (SPMD)"
-- Each thread in the team runs the **same code block** but on **its own data / loop iterations** (identified by `omp_get_thread_num()`).
+> Source: Akhter & Roberts, *Multi-Core Programming* (Intel Press, 2006) — Ch. 6
+> Place the matching textbook figures from the PDF where marked "🖼️".
 
 ---
 
-## 2. Challenges of Threading a Loop & Loop-Carried Dependence
+## 1. What is OpenMP? (A Portable Solution for Threading)
 
-### 2.1 The fundamental goal of OpenMP
-- The **primary use**: turn **loops into parallel regions** so different cores execute **different iterations simultaneously**.
-- Big wins from **Parallellizing Long-Running Loops** (PLRL) — loops dominate scientific/HPC code.
+- **OpenMP** = **Open Multi-Processing**: a portable, **directive-based** API for shared-memory parallel programming in C/C++/Fortran.
+- Based on **compiler pragmas** (`#pragma omp ...`) + a runtime library + environment variables.
+- You parallelize **loops and regions**; OpenMP manages **thread creation, scheduling, and joining**.
+- **Fork–join model:** the master thread spawns a team of threads at a parallel region; threads run concurrently; they join at the end of the region.
+- **Advantages:** incremental parallelization (add pragmas), portable across compilers, less code than raw threads, automatically manages the number of threads.
+- **Key philosophy:** don't hard-code thread count — let OpenMP choose the optimal number.
 
-### 2.2 Two key concepts you must not confuse
-1. **Loop-carried dependence** — the *correctness* problem:
-   - iteration *i+1* needs a value written in iteration *i* (or earlier) → **can't** run iterations concurrently without breaking correctness.
-   - Example (serial): `a[i] = a[i-1] + 1;` — each iteration reads previous → **loop-carried dependence** → NOT parallelizable as-is.
-2. **Data race** — the *concurrency* problem:
-   - two threads simultaneously read/write the same shared variable **without synchronization**.
-
-### 2.3 Deciding "can this loop be parallelized?"
-1. **Check for loop-carried dependences** — if none (or breakable via privatization/reduction), the loop is a candidate.
-2. **Identify shared vs. private data.**
-3. **Watch induction variables and `x = x + something` updates** (reductions).
-
----
-
-## 3. The OpenMP Model: Shared Memory & Data Scoping
-
-- **Shared-memory model:** all threads access a **common address space** (same variables). 
-- Variables are **shared** by default; **private** copies possible.
-- **Key directives for data scoping:**
-
-| Directive/Clause | Effect |
-|---|---|
-| `shared(list)` | Variables shared by all threads (one copy) |
-| `private(list)` | Each thread gets its **own copy** (uninitialized on entry!) |
-| `firstprivate(list)` | Private, **initialized with the master's value** on entry |
-| `lastprivate(list)` | Private; **last thread's value copied back** to the shared var on exit |
-| `default(none)` | All variables **must be** explicitly listed (good hygiene/debugging) |
-| `reduction(op:list)` | Combine each thread's partial result with `op` (safe, no races) |
-
----
-
-## 4. Work-Sharing Constructs
-
-### 4.1 `for` directive — loop partitioning
 ```c
-#pragma omp parallel
-{
-    #pragma omp for
-    for (i = 0; i < N; i++) {
-        c[i] = a[i] + b[i];
-    }
-}
+#include <omp.h>
+#pragma omp parallel for
+for (int i = 0; i < n; i++)
+    a[i] = b[i] + c[i];
 ```
-- The `for` work-share divides iterations among team threads. **No explicit partitioning code needed**.
-- Combined form: `#pragma omp parallel for`.
 
-### 4.2 Scheduling clauses (memorise — likely exam table)
-| Schedule | Effect | Best for |
+> 🖼️ **Image to add:** Fork–join model — master thread forks a team at the parallel region, threads join back at the end.
+
+---
+
+## 2. Challenges in Threading a Loop
+
+Not every loop can be parallelized. Common obstacles:
+
+1. **Loop-carried dependence** — an iteration depends on a previous iteration's result.
+2. **Data races** — concurrent unsynchronized access to shared data.
+3. **Shared vs private data confusion** — variables incorrectly shared (or copied).
+4. **Loop scheduling imbalance** — uneven work per iteration.
+5. **Reduction variables** — accumulators that need special handling.
+6. **Too little work / overhead** — parallel overhead exceeds the work.
+7. **Iteration count / trip-count not known or too small.**
+
+---
+
+## 3. Loop-Carried Dependence
+
+A dependency that crosses loop iterations, preventing parallel execution.
+
+| Type | Meaning | Parallelizable? |
 |---|---|---|
-| **static** | Iterations divided into **equal chunks, assigned at compile time** (round-robin) | **Predictable, uniform work**; lowest overhead |
-| **dynamic** | Chunks assigned **at runtime** from a shared work queue — threads pick the next chunk as they finish | **Varying/irregular work** (load balance) |
-| **guided** | Large chunks first, **decreasing automatically** to a minimum size | Hybrid — reduces scheduling over-head while balancing |
-| **runtime** | Scheduling decision **deferred to runtime** via `OMP_SCHEDULE` env var | Portability/tuning without recompiling |
+| **Flow (RAW)** | iteration i writes what i+1 reads | No (if forward) |
+| **Anti (WAR)** | iteration i reads what i+1 writes | Sometimes (rename) |
+| **Output (WAW)** | two iterations write the same location | No |
 
-Syntax: `schedule(static, chunk_size)` / `schedule(dynamic, size)` / `schedule(guided, min_size)` / `schedule(runtime)`.
-
-> **Trick (the examiner loves this):** `static` asks *"how many iterations per chunk?"* with **no search/overhead**; `dynamic` trades scheduling overhead for **load balance** when work per iteration varies; `guided` = diminishing chunks to keep overhead low *and* balance good.
-
-### 4.3 `reduction` clause — loop-reducing pattern
+**Example (not parallelizable):**
 ```c
-#pragma omp parallel for reduction(+:sum)
-for (i = 0; i < N; i++) sum += a[i];
+for (i = 1; i < n; i++)
+    a[i] = a[i-1] + b[i];   // each depends on previous
 ```
-- Each thread computes a **private partial sum**; at the end, partials are **combined with `+`** (safe, no races).
-- Legal operations: `+ - * & | ^ && ||` (and min/max in later versions).
-- **NOTE:** you must **NOT** put reduction variables in `private()` and then combine manually with a race-prone update — that's the classic bug.
+**Transform to remove dependence:**
+```c
+for (i = 1; i < n; i++)
+    a[i] = a[i-1] + b[i];
+// -> prefix-sum (scan) algorithm, or
+// use b[] independently:
+for (i = 0; i < n; i++)
+    c[i] = b[i] + b[i-1];   // no carried dependence
+```
 
-### 4.4 `sections` — functional (task) decomposition in OpenMP
+**Techniques to break dependence:** reorder loops (loop interchange), scalar expansion (temporaries), use a different algorithm (e.g., scan/reduction), privatize.
+
+---
+
+## 4. Data-Race Conditions
+
+- A **data race** occurs when two threads access the same memory location, at least one writes, without synchronization, and the result depends on timing.
+- OpenMP default: variables declared **outside** the parallel region are **shared**; variables declared **inside** are **private**.
+- The **loop index** is private automatically.
+- **Race example:**
+```c
+int sum = 0;
+#pragma omp parallel for
+for (i = 0; i < n; i++)
+    sum += a[i];        // RACE: sum is shared and updated concurrently
+```
+- **Fix:** use `reduction`, or an atomic/critical section, or private partial sums.
+
+---
+
+## 5. Managing Shared and Private Data
+
+| Clause | Meaning |
+|---|---|
+| `shared(x)` | One copy, visible to all threads (must synchronize writes) |
+| `private(x)` | Each thread gets an uninitialized private copy |
+| `firstprivate(x)` | Private copy **initialized** from the value before the region |
+| `lastprivate(x)` | Private copy of the thread finishing the last iteration is copied back out |
+| `default(shared)` / `default(none)` | Default sharing (use `none` to force explicit clauses — safer) |
+| `threadprivate(x)` | File-scope globals become per-thread persistent |
+
+**Rules of thumb:**
+- **Read-only** data → `shared`.
+- **Loop-local temporaries / accumulators** → `private` or `firstprivate`.
+- Use `default(none)` so you must declare every variable's scope → avoids hidden races.
+- Scalars written in the loop that shouldn't escape → `private`.
+
+> 🖼️ **Image to add:** Diagram distinguishing one shared copy vs per-thread private copies.
+
+---
+
+## 6. Loop Scheduling and Partitioning
+
+The `schedule` clause controls how iterations are assigned to threads.
+
+| Schedule | Description | Best when |
+|---|---|---|
+| **`static`** | Iterations divided into equal chunks at compile time | Uniform work per iteration (predictable) |
+| **`static, chunk`** | Round-robin blocks of size `chunk` | Some variation, low overhead |
+| **`dynamic[, chunk]`** | Threads grab `chunk` iterations at a time (default 1) | Highly variable work (good load balance) |
+| **`guided[, chunk]`** | Large chunks first, shrinking to `chunk` | Variable work, lower overhead than dynamic |
+| **`runtime`** | Chosen at run time via `OMP_SCHEDULE` | Tuning without recompiling |
+| **`auto`** | Compiler/runtime decides | Let the system choose |
+
+- **Static** = least overhead, but poor balance if work varies.
+- **Dynamic** = best balance, but higher overhead (atomic work-sharing).
+- **Guided** = compromise; chunk size decreases over time.
+- `nowait` can be added to remove the implicit barrier when safe.
+
+```c
+#pragma omp parallel for schedule(dynamic, 4)
+for (i = 0; i < n; i++) heavy_work(i);
+```
+
+> 🖼️ **Image to add:** Visual of static vs dynamic vs guided iteration-to-thread assignment.
+
+---
+
+## 7. Effective Use of Reductions
+
+- A **reduction** combines per-thread partial results into one using a commutative/associative operator.
+- Syntax: `reduction(op:var)` where `op` ∈ `+ - * & | ^ && || max min`.
+- Each thread gets a private copy initialized to the operator's identity (0 for +, 1 for *, etc.); copies are merged at the end.
+
+```c
+double sum = 0.0;
+#pragma omp parallel for reduction(+:sum)
+for (i = 0; i < n; i++)
+    sum += a[i];         // safe and efficient
+```
+
+- **Effective use:** use reductions instead of `critical`/`atomic` for accumulators — far less contention.
+- Multiple variables allowed: `reduction(+:x,y)`.
+- **Caveat:** operation must be associative/commutative; floating-point results may differ slightly from sequential due to reordering.
+
+---
+
+## 8. Minimizing Threading Overhead
+
+Sources of overhead:
+1. **Thread creation/teardown** — avoid creating teams repeatedly; put loops inside one parallel region.
+2. **Barriers** — each work-sharing region has an implicit barrier; use `nowait` where safe.
+3. **Scheduling** — prefer `static` when work is uniform.
+4. **False sharing** — pad/align per-thread data.
+5. **Too fine granularity** — each thread must have enough work.
+
+**Techniques:**
+- Combine multiple loops under **one** `parallel` region (`omp parallel` + several `omp for`).
+- Use `if(condition)` clause to run serially when the loop is small.
+- Use `nowait` to skip unnecessary barriers.
+- Use `single` instead of many `critical` sections.
+
+---
+
+## 9. Work-Sharing Sections
+
+`omp sections` / `omp section` — assign **different blocks of code** to threads (task/functional parallelism).
+
 ```c
 #pragma omp parallel sections
 {
-    #pragma omp section
-    { taskA(); }          // functions run concurrently
-    #pragma omp section
-    { taskB(); }
+#pragma omp section
+    compute_A();
+#pragma omp section
+    compute_B();
 }
 ```
-- Each `section` executes **once** by one thread (like task decomposition of Unit 2).
 
-### 4.5 `single` directive
-- Only **one thread** runs the enclosed code; others skip to the implicit barrier (or `nowait`).
+- Complements `omp for` (data parallelism). Use when you have distinct independent tasks.
+- `single` — executes a block by exactly one thread (others skip; implicit barrier unless `nowait`).
+- `master` — executes by the master thread only (no implicit barrier).
 
----
-
-## 5. Synchronization in OpenMP
-
-| Construct | Purpose |
-|---|---|
-| **`barrier`** | **Explicit rendezvous**: every thread waits until ALL have arrived (implicit barrier also at end of `for`/`sections` unless `nowait`) |
-| **`critical`** | Restricts a code block to **one thread at a time** (mutex-like) |
-| **`atomic`** | Performs an update **atomically** for a **single statement** — cheaper than critical |
-| **`ordered`** | Executes a block in **loop order** (like SPMD serialization) |
-| **`master`** | Executes only on the **master thread** |
-| **`nowait`** | Removes the **implicit barrier** at the end of a work-share → threads proceed without waiting |
-| **`flush`** | Memory-consistency point: makes thread's view of shared vars **consistent** with memory |
-
-> **⚠ nowait caution:** removing the barrier breaks ordering guarantees — only safe if downstream code doesn't depend on the other threads' work being done yet. It's a **performance/safety trade-off**; the classic exam question.
-
-### 5.1 Choosing between `critical`, `atomic`, and `barrier`
-- **critical:** arbitrary block; but only one thread at a time → contention.
-- **atomic:** single statement, e.g., `omp atomic; x++;` — hardware-level cheap.
-- **barrier:** you need ALL threads to reach a point (phase) — not a critical section.
-- Triple-rule for answers: *mutual exclusion (critical/atomic), ordering (barrier/ordered), memory visibility (flush).*
+> 🖼️ **Image to add:** `sections` — different code blocks mapped to different threads.
 
 ---
 
-## 6. Copy-In / Copy-Out & Task Queuing
+## 10. Performance-Oriented Programming
 
-### 6.1 Copy-in (`firstprivate`) & copy-out (`lastprivate`)
-- **copy-in:** import the master's value into each thread's private copy **at region start** (`firstprivate`).
-- **copy-out:** export the value of the "final/last thread" back to the shared variable **at region end** (`lastprivate`).
-- Purpose: exchange data between the serial (master) world and the parallel team **without races**.
+- Let OpenMP manage the number of threads; **never hard-code** it.
+- Match runnable threads to hardware threads.
+- Keep the parallel region large (amortize fork/join cost).
+- Avoid false sharing; keep threads on private data and merge at the end.
+- Prefer reductions over locks; prefer `static` scheduling for uniform loops.
+- Tune granularity; measure.
+- Watch the **serial fraction** (Amdahl) and the memory bandwidth ceiling.
 
-### 6.2 `task` — asynchronous task queuing (OpenMP 3.0+)
+---
+
+## 11. Using Barrier and No Wait
+
+- OpenMP inserts **implicit barriers** at the end of `parallel for`, `sections`, `single`.
+- **`barrier`** directive: explicit synchronization point — all threads wait.
+- **`nowait`** clause: removes the implicit barrier (use only when following code doesn't depend on results — otherwise races).
+
 ```c
-#pragma omp task        // enqueue task
-{ work(); }
-#pragma omp taskwait    // wait until all tasks complete
-```
-- Threads pick tasks from the **task pool/queue** as they free up → dynamic load balancing.
-- **Ideal for irregular (recursive) workloads** that can't be expressed as simple loops (e.g., recursive tree traversal, linked-list processing).
-- `task` + `taskwait` is OpenMP's answer to *divide-and-conquer*/*task-decomposition* patterns.
-
----
-
-## 7. Library Functions & Environment Variables (memorize key few)
-
-### 7.1 Runtime library (OpenMP API)
-```c
-#include <omp.h>
-int    omp_get_num_threads(void);   // size of current team
-int    omp_get_thread_num(void);    // own id in [0, n-1]
-int    omp_get_num_procs(void);     // # of processors (logical)
-void   omp_set_num_threads(int n);  // request team size
-double omp_get_wtime(void);         // elapsed wall-clock (benchmarking!)
-int    omp_get_max_threads(void);
-```
-
-### 7.2 Environment variables
-| Variable | Effect |
-|---|---|
-| `OMP_NUM_THREADS` | Default team size (overridden by `omp_set_num_threads` and `num_threads` clause — precedence: clause > library > env > default) |
-| `OMP_SCHEDULE` | Default schedule (`static`, `dynamic,size`, `guided`) when `schedule(runtime)` used |
-| `OMP_DYNAMIC` | Allow runtime to shrink/grow the team adaptively (`true`/`false`) |
-
-> **Precedence trick (exam question!):** `num_threads(4)` clause beats `omp_set_num_threads(4)` beats `OMP_NUM_THREADS=4` beats the OpenMP default (usually #cores). 
-
----
-
-## 8. Minimizing Synchronization & Threading Overhead (performance rules)
-
-1. **Parallelize the long-running loops**; leave short loops/overheads serial.
-2. **Merge multiple parallel regions** — each fork/join has overhead; fewer regions = less overhead (OpenMP reuses thread teams).
-3. **Use `private`/`reduction` to remove races** instead of sprinkling `critical` everywhere (critical = contention).
-4. **Use `nowait` where safe** to avoid barrier stalls — but be careful with ordering.
-5. **Match thread count to workload & machine** (`OMP_NUM_THREADS` ≈ cores, not more — oversubscription slows).
-6. **Avoid false sharing** in arrays (see Unit 5): pad/lay out data so threads don't share cache lines they're both writing.
-7. **Minimize work inside `critical`/`atomic`** — smaller critical section ⇒ bigger speedup (ties to Unit 3!).
-8. **Verify correctness on 1 thread first**, then scale threads and check **speedup**.
-
----
-
-## 9. Quick Revision & Exam Strategy
-
-### Example exam-style worked program
-```c
-#include <stdio.h>
-#include <omp.h>
-int main() {
-    int i, n = 100000;
-    double sum = 0.0;
-    double a[100000];
-    for (i=0;i<n;i++) a[i] = i * 1.0;
-    omp_set_num_threads(4);
-    #pragma omp parallel for reduction(+:sum) schedule(static, 25000)
-    for (i=0;i<n;i++) sum += a[i];
-    printf("sum = %f, threads = %d\n", sum, omp_get_max_threads());
-    return 0;
+#pragma omp parallel
+{
+#pragma omp for nowait
+    for (i=0;i<n;i++) a[i] = work(i);   // no barrier; safe if b doesn't depend on a
+#pragma omp for
+    for (i=0;i<n;i++) b[i] = a[i];      // has implicit barrier
 }
 ```
-**Expected discussion points:** team of 4; static chunks of 25000 each; `reduction(+:sum)` is race-free; implicit barrier at loop end; speedup ≈ 4× minus fork/join + memory-bandwidth effects.
+- **Rule:** add `nowait` only when you can prove no cross-thread dependency.
 
-### Likely exam questions
-1. Explain the OpenMP programming model (directives, runtime library, env vars) with the fork–join model.
-2. Explain `schedule(static/dynamic/guided/runtime)` with situations. (10 marks)
-3. "Why is it important to keep a critical section as small as possible?" (+ explain nowait trade-offs)
-4. Explain parallelizing difficulties: loop-carried dependence, data race — with examples.
-5. Explain `reduction`, `firstprivate`/`lastprivate` (copy-in/copy-out), `task`, `flush`.
-6. Optimize a given serial loop with OpenMP; state the expected speedup.
-7. Compare `critical` vs `atomic` vs `barrier` vs `task` (with situations).
-
-### Tips & Tricks
-- **Always write the fork–join diagram** for any OpenMP essay.
-- For "difficulties" questions, give **a concrete loop** (e.g., `a[i]=a[i-1]+1`) that is serial due to loop-carried dependence, and one like `c[i]=a[i]+b[i]` that parallelizes cleanly.
-- Quote the **schedule-reasoning table**; pair `dynamic` with "load balance for irregular work".
-- For overhead minimization questions, answer in a **numbered list of 5–6 rules** (§8) — the examiner wants a checklist.
-- Mention `omp_get_wtime()` for measuring speedup — shows practical awareness.
+> 🖼️ **Image to add:** Two `omp for` loops with a barrier between them; `nowait` removes the barrier.
 
 ---
-*Sources: Multicore_Architecture.md (OpenMP session, lecture slides); syllabus.txt (Unit IV).*
+
+## 12. Interleaving Single-Thread and Multi-Thread Execution
+
+- Some code must run serially (I/O, setup, sequential algorithm parts).
+- Use `single`/`master` inside a parallel region for serial work without leaving the region.
+- Use `#pragma omp parallel` guard conditions to run parallel or serial code based on size (`if` clause).
+- OpenMP lets you keep one `parallel` region and interleave parallel and single-threaded segments, avoiding repeated fork/join overhead.
+
+```c
+#pragma omp parallel
+{
+#pragma omp single
+    init();             // one thread initializes
+#pragma omp for
+    for(...) compute(); // all threads
+#pragma omp master
+    report();           // master only
+}
+```
+
+---
+
+## 13. Data Copy-In and Copy-Out
+
+- `firstprivate(var)` — **copy in**: private copy initialized with the value from before the region (useful for input values).
+- `lastprivate(var)` — **copy out**: the private value from the thread doing the **last** iteration is written back to the shared variable (useful for loop results).
+- `copyin(var)` — for `threadprivate` variables: copy the master's value into each thread's copy.
+- `copyprivate(var)` — broadcast a `single` thread's private value to all other threads' copies.
+
+```c
+int last;
+#pragma omp parallel for lastprivate(last)
+for (i=0;i<n;i++) { last = i; work(i); }
+// after loop, last == n-1 (value from final iteration)
+```
+
+---
+
+## 14. Protecting Updates of Shared Variables
+
+For shared updates that aren't reductions:
+
+| Construct | Use |
+|---|---|
+| **`atomic`** | Single fast update of one variable (`x += v`, `x++`); hardware atomic; cheapest |
+| **`critical`** | Named or unnamed critical section; heavier but protects arbitrary code |
+
+```c
+#pragma omp parallel for
+for (i=0;i<n;i++) {
+    #pragma omp atomic
+    counter++;                 // fast, single variable
+}
+```
+- Prefer `atomic` for simple scalar updates; use `critical` for compound operations.
+- Prefer `reduction` when accumulating — best performance.
+
+> 🖼️ **Image to add:** Decision flow: reduction vs atomic vs critical for shared updates.
+
+---
+
+## 15. Intel Task Queuing Extension to OpenMP
+
+- Classic OpenMP ties parallelism to loop/section **structures**; tasks allow **dynamic, irregular** parallelism.
+- **Task queuing** (`#pragma omp task`) lets you create tasks that execute later, enabling **recursive and irregular** parallelism (e.g., tree traversals).
+- Supports **task queues** for load balancing of unpredictable workloads.
+- The standard later adopted `task` and `taskwait` (OpenMP 3.0).
+
+```c
+#pragma omp parallel
+#pragma omp single
+{
+    #pragma omp task
+    process_left();
+    #pragma omp task
+    process_right();
+}
+```
+
+---
+
+## 16. OpenMP Library Functions
+
+| Function | Purpose |
+|---|---|
+| `omp_get_thread_num()` | ID of the calling thread (0 = master) |
+| `omp_get_num_threads()` | Number of threads in current team |
+| `omp_get_max_threads()` | Max threads available |
+| `omp_set_num_threads(n)` | Set number of threads |
+| `omp_get_num_procs()` | Number of processors |
+| `omp_in_parallel()` | Are we inside a parallel region? |
+| `omp_get_wtime()` | Wall-clock time (for timing) |
+| `omp_set_dynamic()`, `omp_get_dynamic()` | Dynamic team sizing |
+| `omp_init_lock`, `omp_set_lock` | OpenMP lock routines |
+
+---
+
+## 17. OpenMP Environment Variables
+
+| Variable | Purpose |
+|---|---|
+| **`OMP_NUM_THREADS`** | Default number of threads |
+| **`OMP_SCHEDULE`** | Default schedule for `schedule(runtime)` |
+| **`OMP_DYNAMIC`** | Enable/disable dynamic thread count adjustment |
+| **`OMP_NESTED`** | Enable/disable nested parallelism |
+| `OMP_STACKSIZE` | Stack size per thread |
+| `OMP_PROC_BIND` / `OMP_PLACES` | Thread affinity |
+
+---
+
+## 18. Compilation, Debugging, Performance
+
+- **Compilation:** enable OpenMP support:
+  - GCC/Clang: `-fopenmp`
+  - Intel: `-qopenmp` / `-openmp`
+  - MSVC: `/openmp` (older versions: `/openmp:experimental`)
+  - Link the OpenMP runtime library.
+- **Debugging:** common bugs = data races, wrong sharing, missing barriers. Use tools (**Intel Thread Checker**) and `default(none)` to catch scope mistakes.
+- **Performance:** tune schedule, granularity, thread count; avoid false sharing; use reductions; measure with `omp_get_wtime`.
+
+```bash
+gcc prog.c -o prog -fopenmp
+OMP_NUM_THREADS=4 ./prog
+```
+
+---
+
+## OpenMP Directive Quick Reference
+
+| Directive | Meaning |
+|---|---|
+| `parallel` | Start a parallel region |
+| `parallel for` | Parallelize a for loop |
+| `sections` / `section` | Functional parallelism |
+| `single` / `master` | One thread / master only |
+| `barrier` | Explicit sync point |
+| `critical` | Mutual exclusion |
+| `atomic` | Single atomic update |
+| `reduction` | Parallel accumulator |
+| `task` | Dynamic task |
+| `nowait` | Skip implicit barrier |
+
+---
+
+## 🧠 How to Remember (Mnemonics & Tips)
+
+- **OpenMP = "Pregma-driven":** you just say `#pragma omp` and the runtime handles threads. **Fork–join** is the mental model.
+- **Sharing rule:** *"Outside = shared, Inside = private, Index = private."*
+- **`default(none)` = "no hiding allowed"** → forces you to declare every variable → catches races early.
+- **Schedule choice:** *"Static = predictable & fast; Dynamic = variable work & balanced; Guided = shrinking chunks (best of both)."*
+- **Reduction = "spread then combine"** — each thread has its own partial, merged at the end.
+- **`atomic` < `critical` in cost** but works only on one variable; **`reduction` beats both** for accumulators.
+- **`nowait` warning:** *Only when the next loop doesn't read this one's output.*
+- **First/last private:** *First = copy **in**, Last = copy **out**.*
+- **Compile flags:** GCC `-fopenmp`, Intel `-qopenmp`, MSVC `/openmp`.
+
+## ⭐ Likely Exam Questions
+1. What is OpenMP? Explain the fork–join execution model.
+2. Explain loop-carried dependence and how to identify/handle it.
+3. How does OpenMP manage shared and private data? Explain `firstprivate`, `lastprivate`, `default(none)`.
+4. Explain the OpenMP schedule clause options and when to use each.
+5. Explain reductions with an example; why are they better than critical sections?
+6. What are common OpenMP threading overheads and how do you minimize them?
+7. Differentiate `atomic`, `critical`, and `reduction` for protecting shared updates.
+8. Explain `barrier` and `nowait` with examples.
+9. List and explain OpenMP library functions and environment variables.
+10. How do you compile and debug an OpenMP program?
