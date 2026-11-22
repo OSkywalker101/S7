@@ -1,0 +1,76 @@
+\chapter{Implementation}
+
+\section{Implementation Overview}
+The system is implemented as a modular Python application integrating arXiv ingestion, PDF parsing, metadata-aware indexing, retrieval, and LLM-based generation. The implementation supports three primary capabilities: paper summarization, question answering with exact section/page citations, and side-by-side comparison of two to three research papers.
+
+\section{Module-wise Implementation}
+
+\subsection{Paper Acquisition using arXiv API}
+The arXiv module accepts user inputs such as keywords, titles, or arXiv identifiers. It queries the arXiv API to retrieve metadata (title, authors, abstract, publication details, categories) and downloads the corresponding PDF files \cite{b12}. Retrieved papers are stored locally with consistent identifiers to support repeatable indexing and selection within the interface.
+
+\subsection{PDF Parsing and Document Structuring}
+Downloaded PDFs are processed page by page to extract textual content while retaining page numbers. Lightweight heuristics are applied to detect common section headings (e.g., Abstract, Introduction, Related Work, Method/Methodology, Experiments/Results, Conclusion). The output of this stage is a structured representation where each text segment is associated with metadata fields: \texttt{paper\_id}, \texttt{paper\_title}, \texttt{section}, and \texttt{page}. This metadata is preserved throughout the pipeline to enable fine-grained citations.
+
+\subsection{Chunking and Metadata Enrichment}
+Extracted text is divided into overlapping chunks using a recursive/character-based text splitting strategy to balance context completeness and retrieval precision. Each chunk inherits document-level and segment-level metadata (paper, section, page range). Overlap helps reduce boundary loss when important information spans chunk edges.
+
+\subsection{Embedding Generation and Vector Indexing}
+Text chunks are transformed into dense embeddings using a semantic embedding model. Embeddings, along with their text and metadata, are stored in a local vector database (FAISS or Chroma) to enable efficient similarity search \cite{b10,b11}. Separate collections or metadata filters are used to scope retrieval to one or more selected papers as required by the task.
+
+\subsection{Retrieval Pipeline}
+For a given user query, the system computes a query embedding and retrieves the top-$k$ most relevant chunks from the vector store. Retrieval can be constrained to selected paper(s) to improve relevance in single-paper QA/summarization or multi-paper comparison. Retrieved chunks, together with their metadata, form the evidence context passed to the LLM.
+
+\subsection{Summarization Module}
+The summarization feature generates concise, structured summaries of selected papers. Prompt templates instruct the LLM to focus on key aspects such as the research problem, proposed approach, datasets/experimental setup, main results, and limitations, using only retrieved context. Summaries are presented in readable sections or bullet points to facilitate quick understanding.
+
+\subsection{Question Answering with Section/Page Citations}
+The QA module implements citation-grounded response generation. The prompt includes:
+\begin{itemize}
+    \item The user question.
+    \item Retrieved context chunks annotated with source metadata.
+    \item Instructions to answer strictly based on provided evidence, to cite the \textbf{exact section and page} for each key claim (e.g., \textit{[Paper Title, Methodology, p.~4]}), and to state when the answer cannot be found in the retrieved context.
+\end{itemize}
+This design improves transparency and allows users to verify answers against the original paper.
+
+\subsection{Side-by-Side Comparison of Two to Three Papers}
+The comparison module enables users to select two or three indexed papers and specify or choose comparison aspects (such as objectives, methodology, datasets, evaluation metrics, results, and limitations). The system performs targeted retrieval per paper and per aspect, then prompts the LLM to synthesize a structured side-by-side comparison (table or aligned bullets). Where applicable, comparative statements include citations to the corresponding paper sections/pages to support evidence-backed analysis.
+
+\subsection{User Interface Workflow}
+A lightweight web interface (Streamlit/Gradio) provides an end-to-end workflow:
+\begin{enumerate}
+    \item Search and fetch papers from arXiv.
+    \item Parse and index selected papers (with status feedback).
+    \item Choose an action: summarize a paper, ask a question, or compare 2--3 papers.
+    \item View generated outputs along with section/page citations and comparison views.
+\end{enumerate}
+
+\section{Screenshot Provisions}
+UI screenshots were not captured at the time of report preparation. The following placeholders are included for later inclusion:
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][5cm][c]{0.8\textwidth}{\centering Screenshot placeholder: Paper search and selection interface\\(\texttt{figures/ui\_paper\_selection.png})}}
+    \caption{Placeholder for paper retrieval and selection screen.}
+    \label{fig:ui_paper_selection}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][5cm][c]{0.8\textwidth}{\centering Screenshot placeholder: Paper summarization output\\(\texttt{figures/ui\_summary.png})}}
+    \caption{Placeholder for summarization output screen.}
+    \label{fig:ui_summary}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][5cm][c]{0.8\textwidth}{\centering Screenshot placeholder: QA response with section/page citations\\(\texttt{figures/ui\_qa\_citation.png})}}
+    \caption{Placeholder for question answering with citation screen.}
+    \label{fig:ui_qa_citation}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][5cm][c]{0.8\textwidth}{\centering Screenshot placeholder: Side-by-side comparison of 2--3 papers\\(\texttt{figures/ui\_comparison.png})}}
+    \caption{Placeholder for multi-paper comparison screen.}
+    \label{fig:ui_comparison}
+\end{figure}

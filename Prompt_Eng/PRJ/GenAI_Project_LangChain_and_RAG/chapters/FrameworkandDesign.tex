@@ -1,0 +1,63 @@
+\chapter{Project Workflow}
+
+\section{System Architecture}
+The system is designed as a modular Retrieval-Augmented Generation (RAG) pipeline that ingests research papers from arXiv, processes them into a structured and searchable knowledge base, and generates grounded outputs for summarization, question answering, and multi-paper comparison.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox[c][6cm][c]{0.85\textwidth}{\centering System architecture diagram to be added\\(e.g., \texttt{figures/system\_architecture.png})}}
+    \caption{Overall architecture of the AI-based research paper summarization and question answering system (placeholder).}
+    \label{fig:system_architecture}
+\end{figure}
+
+\subsection{Architecture Components}
+\begin{itemize}
+    \item \textbf{User Interface:} Provides options to search or input arXiv papers, trigger ingestion/indexing, request summaries, ask questions, and select two to three papers for comparison.
+    \item \textbf{arXiv Retrieval Module:} Uses the arXiv API to fetch paper metadata (title, authors, abstract, identifiers, categories) and download corresponding PDF files \cite{b12}.
+    \item \textbf{PDF Parsing and Structuring Module:} Extracts text from PDFs while preserving page boundaries and attempting to identify section headings (e.g., Introduction, Methodology, Experiments, Conclusion). Parsed units are associated with metadata such as paper ID, title, section name, and page number.
+    \item \textbf{Chunking and Metadata Enrichment:} Splits extracted text into manageable chunks with configurable size and overlap. Each chunk stores provenance metadata to enable fine-grained citation in generated responses.
+    \item \textbf{Embedding and Vector Store:} Converts chunks into dense vector embeddings and stores them in a vector database (e.g., FAISS or Chroma) for efficient similarity search \cite{b10,b11}.
+    \item \textbf{Retriever:} Given a user query (or a comparison aspect), retrieves top-$k$ relevant chunks, optionally filtered by selected paper(s), to provide focused context.
+    \item \textbf{Prompting and LLM Generation:} Constructs task-specific prompts for summarization, citation-grounded QA, and side-by-side comparison. The LLM generates responses constrained to retrieved evidence and includes citations in the form of paper/section/page references.
+    \item \textbf{Response Formatter:} Presents summaries, cited answers, and comparison tables/bullets in a user-readable format within the interface.
+\end{itemize}
+
+\subsection{Data Flow}
+\begin{enumerate}
+    \item User selects or searches for papers via the arXiv module.
+    \item PDFs are downloaded and parsed into page/section-aware text segments.
+    \item Segments are chunked, embedded, and indexed in the vector store with metadata.
+    \item For QA/summarization, the user query triggers retrieval of relevant chunks.
+    \item Retrieved context is injected into a prompt template and passed to the LLM.
+    \item The system returns grounded output with section/page citations; for comparison, evidence from 2--3 papers is aligned and synthesized into a structured comparison.
+\end{enumerate}
+
+\subsection{Citation and Comparison Design}
+\begin{itemize}
+    \item \textbf{Exact Section/Page Citation:} Each indexed chunk carries \texttt{paper\_id}, \texttt{title}, \texttt{section}, and \texttt{page}. Prompts instruct the model to answer only from provided context and append citations such as \textit{[Paper Title, Section, p.~X]} for factual claims. If evidence is insufficient, the system responds accordingly.
+    \item \textbf{Side-by-Side Comparison (2--3 Papers):} The comparison workflow retrieves relevant passages per paper for selected aspects (e.g., objective, methodology, dataset, metrics, results, limitations). The LLM produces a structured comparison (table or aligned bullets) highlighting similarities and differences, with citations attached to key points where applicable.
+\end{itemize}
+
+\section{Software Requirements}
+The following software components and libraries are used or required for the system:
+\begin{itemize}
+    \item \textbf{Programming Language:} Python 3.10+.
+    \item \textbf{LLM Orchestration:} LangChain for document loading, text splitting, embeddings, vector store integration, retrieval, and prompt chains \cite{b5,b6,b7}.
+    \item \textbf{Paper Source:} arXiv API client/library for searching and downloading papers \cite{b12}.
+    \item \textbf{PDF Processing:} PyMuPDF (fitz) and/or pdfplumber for text extraction with page-level information.
+    \item \textbf{Embeddings:} Sentence-transformer or API-based embedding model for semantic vector representations.
+    \item \textbf{Vector Database:} FAISS or Chroma for local storage and similarity search \cite{b10,b11}.
+    \item \textbf{Language Model:} API-accessible LLM (configurable provider) for summarization, QA, and comparison generation.
+    \item \textbf{User Interface:} Streamlit or Gradio for an interactive web-based interface.
+    \item \textbf{Utilities:} \texttt{python-dotenv} for configuration, standard data handling libraries, and logging utilities.
+    \item \textbf{Operating System:} Windows/Linux/macOS with internet connectivity for arXiv access and LLM API calls.
+\end{itemize}
+
+\section{Hardware Requirements}
+\begin{itemize}
+    \item \textbf{Processor:} Intel Core i5/AMD equivalent or higher.
+    \item \textbf{Memory (RAM):} Minimum 8 GB (16 GB recommended for smoother indexing of multiple papers).
+    \item \textbf{Storage:} Sufficient disk space for downloaded PDFs, embedding indexes, and local caches.
+    \item \textbf{GPU:} Not mandatory; the implemented pipeline can operate using CPU-based processing and external LLM/embedding APIs.
+    \item \textbf{Network:} Stable internet connection for accessing the arXiv API and remote model services.
+\end{itemize}

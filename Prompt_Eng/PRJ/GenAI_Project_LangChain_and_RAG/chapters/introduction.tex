@@ -1,0 +1,546 @@
+\chapter{Generative AI Applications}
+
+%========================================================
+\section{Prompt Engineering}
+%========================================================
+
+Prompt Engineering is the process of designing and refining instructions given to Large Language Models (LLMs) to obtain accurate, relevant, and meaningful responses. It involves structuring prompts with appropriate instructions, context, examples, constraints, and output formats to guide the model's behavior. Effective prompt engineering improves the quality of generated responses and enables LLMs to perform tasks such as question answering, summarization, classification, reasoning, and code generation.
+
+\subsection{Key Components of a Prompt}
+
+A well-designed prompt generally consists of the following components:
+
+\begin{itemize}
+    \item Instruction: Specifies the task that the language model must perform, such as summarizing a document or answering a question.
+    
+    \item Context: Provides background information required by the model to understand the task and generate relevant responses.
+    
+    \item Input Data: Contains the actual information, question, or text that needs to be processed.
+    
+    \item Examples: Demonstrates the expected input-output behaviour to guide the model in generating similar responses.
+    
+    \item Output Format: Specifies the expected response structure, such as plain text, JSON, XML, or a table.
+    
+    \item Constraints: Defines limitations such as response length, language, tone, and the information that should or should not be included.
+\end{itemize}
+
+\subsection{Types of Prompting Techniques}
+
+\begin{itemize}
+    \item Zero-Shot Prompting: The model is given an instruction without providing any examples. It uses its pre-trained knowledge to perform the requested task.
+    
+    \item One-Shot Prompting: A single example is provided in the prompt to demonstrate the expected response format or behaviour.
+    
+    \item Few-Shot Prompting: Multiple examples are included in the prompt to help the model identify patterns and generate appropriate outputs.
+    
+    \item Role-Based Prompting: Assigns a specific role or identity to the model, such as a teacher, software developer, researcher, or data analyst, to guide its response style and domain.
+    
+    \item Contextual Prompting: Provides relevant background information or domain-specific details to improve the accuracy and relevance of generated responses.
+    
+    \item Instruction-Based Prompting: Uses clear and specific instructions to guide the model through a particular task.
+    
+    \item Structured Output Prompting: Instructs the model to generate responses in a predefined format, such as JSON objects, tables, or structured lists.
+\end{itemize}
+
+\subsection{Advanced Prompt Engineering Techniques}
+
+Advanced prompting techniques improve the reasoning and problem-solving capabilities of LLMs.
+
+\begin{itemize}
+    \item Chain-of-Thought (CoT) Prompting: Encourages the model to break a complex problem into smaller intermediate reasoning steps before producing the final answer. It is useful for mathematical problems, logical reasoning, and multi-step tasks.
+    
+    \item Self-Consistency: Generates multiple reasoning paths for the same problem and selects the most consistent answer. This technique can improve reliability in reasoning-intensive tasks.
+    
+    \item Tree of Thoughts (ToT): Explores multiple possible reasoning paths in a tree-like structure. It evaluates alternative solutions and selects promising paths to solve complex problems.
+    
+    \item ReAct (Reasoning and Acting): Combines reasoning with actions by allowing an LLM to determine the next action, invoke an external tool, observe its output, and continue the task.
+    
+    \item Prompt Chaining: Divides a complex task into multiple smaller prompts, where the output of one prompt becomes the input to the next prompt.
+    
+    \item Retrieval-Augmented Prompting: Supplies relevant external information along with the user query so that the model can generate responses based on the retrieved context.
+\end{itemize}
+
+\subsection{Prompt Design Strategies}
+
+Effective prompts should be clear, specific, and unambiguous. The following strategies help improve prompt quality:
+
+\begin{itemize}
+    \item Define the objective clearly and specify the expected task.
+    
+    \item Provide sufficient context and relevant background information.
+    
+    \item Use examples when the expected output format is complex.
+    
+    \item Specify the desired response length, tone, and structure.
+    
+    \item Divide complex instructions into smaller and manageable tasks.
+    
+    \item Include constraints to avoid irrelevant or unsupported information.
+    
+    \item Test and refine prompts based on the quality of generated responses.
+\end{itemize}
+
+\subsection{Applications of Prompt Engineering}
+
+\begin{itemize}
+    \item Text Generation: Generates articles, reports, descriptions, and creative content.
+    
+    \item Question Answering: Answers user queries based on instructions and provided context.
+    
+    \item Text Summarization: Converts lengthy documents into concise summaries.
+    
+    \item Sentiment Analysis: Identifies positive, negative, or neutral opinions from textual data.
+    
+    \item Code Generation: Generates, explains, and debugs programming code.
+    
+    \item Educational Applications: Creates quizzes, explanations, learning materials, and personalized study assistance.
+    
+    \item Conversational Systems: Enables intelligent chatbots and virtual assistants to interact with users.
+\end{itemize}
+
+
+%========================================================
+\section{LangChain Framework}
+%========================================================
+
+LangChain is an open-source framework designed to develop applications powered by Large Language Models (LLMs). It provides a set of reusable components that connect language models with external data sources, APIs, databases, and computational tools. Instead of interacting with an LLM through a single prompt, LangChain allows developers to construct complex applications by combining multiple components into a sequence of operations.
+
+LangChain simplifies the development of applications such as conversational chatbots, document question-answering systems, AI agents, and Retrieval-Augmented Generation (RAG) applications.
+
+\subsection{Key Features of LangChain}
+
+\begin{itemize}
+    \item Model Integration: Supports integration with different language models and providers, including OpenAI, Google Gemini, Anthropic, and Cohere.
+    
+    \item Prompt Management: Provides reusable prompt templates that allow developers to dynamically insert user inputs and contextual information.
+    
+    \item Chain Construction: Enables multiple operations to be connected into a sequence, where the output of one component becomes the input of another.
+    
+    \item Data Integration: Connects LLM applications with external data sources, including PDF documents, text files, websites, and databases.
+    
+    \item Tool Integration: Allows language models to interact with external tools such as search engines, calculators, APIs, and databases.
+    
+    \item Agent Development: Supports the development of AI agents that select and execute appropriate tools to accomplish user-defined tasks.
+    
+    \item Retrieval Support: Provides components for document loading, text splitting, embeddings, vector stores, and information retrieval.
+\end{itemize}
+
+\subsection{Core Components of LangChain}
+
+LangChain consists of several components that work together to build LLM-powered applications.
+
+\begin{itemize}
+    \item Language Models: Language models process user inputs and generate natural language responses. LangChain provides a common interface for interacting with different LLM providers.
+    
+    \item Prompt Templates: Prompt templates define reusable instructions with placeholders for dynamic inputs. They help maintain consistency across multiple interactions.
+    
+    \item Output Parsers: Output parsers convert the raw text generated by an LLM into structured formats such as JSON objects, lists, or application-specific data structures.
+    
+    \item Document Loaders: Document loaders import information from external sources such as PDF files, text files, CSV files, web pages, and databases.
+    
+    \item Text Splitters: Text splitters divide large documents into smaller chunks to facilitate efficient processing, embedding generation, and retrieval.
+    
+    \item Embeddings: Embedding models convert textual information into numerical vector representations that capture semantic meaning.
+    
+    \item Vector Stores: Vector stores maintain and index embeddings to support efficient similarity-based searching and retrieval.
+    
+    \item Retrievers: Retrievers identify and return relevant documents or text chunks based on a user's query.
+    
+    \item Tools: Tools provide external capabilities such as web searching, mathematical calculations, API access, and database operations.
+    
+    \item Agents: Agents use LLMs to determine which tools or actions are required to accomplish a task.
+\end{itemize}
+
+\subsection{LangChain Expression Language (LCEL)}
+
+LangChain Expression Language (LCEL) provides a declarative approach to combining LangChain components into executable sequences called chains. It uses the pipe operator to connect components, where the output of one component is passed as the input to the next component.
+
+For example, a basic LLM application can be represented as:
+
+\[
+\text{Prompt} \rightarrow \text{LLM} \rightarrow \text{Output Parser}
+\]
+
+\begin{itemize}
+    \item Prompt: Defines the instructions and input variables.
+    
+    \item LLM: Processes the prompt and generates a response.
+    
+    \item Output Parser: Converts the generated response into the required format.
+\end{itemize}
+
+LCEL supports streaming, asynchronous execution, and composition of multiple components, making it useful for developing scalable LLM applications.
+
+\subsection{Chains in LangChain}
+
+A chain represents a sequence of operations in which multiple components are connected to perform a specific task.
+
+\begin{itemize}
+    \item Simple LLM Chain: Combines a prompt template with a language model to generate responses.
+    
+    \item Sequential Chain: Executes multiple chains sequentially, where the output of one chain becomes the input to another.
+    
+    \item Retrieval Chain: Retrieves relevant documents from a knowledge source and passes them to an LLM to generate context-based responses.
+    
+    \item Conversational Chain: Maintains conversational context to support multiple interactions between a user and an application.
+\end{itemize}
+
+\subsection{Memory and Chat History}
+
+Memory and chat history help conversational applications maintain context across multiple interactions. Instead of treating every user query independently, the application can use previous messages to understand the conversation.
+
+\begin{itemize}
+    \item Conversation History: Stores previous user messages and assistant responses.
+    
+    \item Message Management: Organizes interactions using message types such as system, human, and AI messages.
+    
+    \item Context Preservation: Provides relevant previous interactions to the language model to generate context-aware responses.
+    
+    \item Persistent Storage: Conversation information can be stored in databases or other storage systems to support long-running applications.
+\end{itemize}
+
+\subsection{AI Agents and Tool Calling}
+
+An AI agent is an intelligent application that uses an LLM to decide which actions or tools are required to accomplish a given task. Unlike a traditional chain that follows a predefined sequence, an agent can dynamically select tools based on the user query and the available information.
+
+\begin{itemize}
+    \item Reasoning: Interprets the user query and determines the appropriate steps to complete the task.
+    
+    \item Tool Selection: Selects suitable tools such as search engines, calculators, APIs, and databases.
+    
+    \item Tool Execution: Invokes the selected tools and receives their outputs.
+    
+    \item Observation: Evaluates the tool results and determines whether additional actions are necessary.
+    
+    \item Response Generation: Generates the final response based on the observations and available information.
+\end{itemize}
+
+The general working process of an AI agent can be represented as:
+
+\[
+\text{User Query} \rightarrow \text{LLM Reasoning}
+\]
+
+\[
+\downarrow
+\]
+
+\[
+\text{Tool Selection} \rightarrow \text{Tool Execution}
+\]
+
+\[
+\[
+\downarrow
+\]
+
+\[
+\text{Observation} \rightarrow \text{Final Response}
+\]
+
+\subsection{Applications of LangChain}
+
+\begin{itemize}
+    \item Conversational Chatbots: Develops intelligent conversational systems using LLMs and conversation history.
+    
+    \item Document Question Answering: Enables users to ask questions about uploaded documents and receive context-based responses.
+    
+    \item AI Research Assistants: Integrates search engines, document repositories, and LLMs to support information retrieval and research.
+    
+    \item Automated Data Processing: Extracts, classifies, summarizes, and transforms information from different data sources.
+    
+    \item AI Agents: Develops applications that interact with external tools and APIs to perform complex tasks.
+    
+    \item Enterprise Knowledge Assistants: Connects internal organizational documents and databases to provide relevant information to employees.
+\end{itemize}
+
+
+%========================================================
+\section{Retrieval-Augmented Generation (RAG)}
+%========================================================
+
+Retrieval-Augmented Generation (RAG) is an approach that combines information retrieval with the text generation capabilities of Large Language Models. It enables an LLM to generate responses using relevant information retrieved from external knowledge sources rather than relying only on its pre-trained knowledge.
+
+RAG is particularly useful when an application requires domain-specific, updated, or private information that may not be available in the model's training data. It also helps reduce unsupported responses by providing relevant source information as context to the language model.
+
+\subsection{Need for RAG}
+
+Traditional LLMs have certain limitations when answering questions that require external or frequently updated information.
+
+\begin{itemize}
+    \item Knowledge Limitations: An LLM may not have information about recent events, newly published documents, or organization-specific knowledge.
+    
+    \item Hallucinations: LLMs may generate incorrect or unsupported information when they do not have sufficient context.
+    
+    \item Private Data Access: Pre-trained models do not automatically have access to an organization's internal documents, databases, or confidential information.
+    
+    \item Knowledge Updates: Retraining or fine-tuning an LLM whenever new information becomes available can be expensive and time-consuming.
+    
+    \item Domain-Specific Queries: General-purpose LLMs may not provide sufficiently accurate answers for specialized domains such as healthcare, finance, education, and law.
+\end{itemize}
+
+RAG addresses these limitations by retrieving relevant information from external knowledge sources and supplying it to the LLM during response generation.
+
+\subsection{Architecture of RAG}
+
+A RAG system consists of two major phases: the indexing phase and the retrieval and generation phase.
+
+\subsubsection{1. Indexing Phase}
+
+The indexing phase prepares external documents for efficient retrieval.
+
+\begin{itemize}
+    \item Document Loading: Documents are collected from sources such as PDF files, Word documents, text files, websites, and databases.
+    
+    \item Text Extraction: Relevant textual information is extracted from the loaded documents.
+    
+    \item Text Splitting: Large documents are divided into smaller chunks to improve retrieval efficiency and maintain manageable context sizes.
+    
+    \item Embedding Generation: Each text chunk is converted into a numerical vector using an embedding model.
+    
+    \item Vector Storage: The generated embeddings and associated text chunks are stored in a vector database for efficient similarity searching.
+\end{itemize}
+
+\subsubsection{2. Retrieval and Generation Phase}
+
+This phase retrieves relevant information and generates an answer to the user's query.
+
+\begin{itemize}
+    \item User Query: The user submits a question to the RAG application.
+    
+    \item Query Embedding: The query is converted into a vector representation using the embedding model.
+    
+    \item Similarity Search: The query embedding is compared with stored document embeddings to identify relevant chunks.
+    
+    \item Context Retrieval: The most relevant document chunks are retrieved from the vector database.
+    
+    \item Prompt Construction: The retrieved information is combined with the user's question to construct a contextual prompt.
+    
+    \item Response Generation: The LLM processes the contextual prompt and generates a response based on the retrieved information.
+\end{itemize}
+
+\subsection{Mathematical Representation of RAG}
+
+Let the knowledge base contain documents represented by:
+
+\[
+D = \{d_1,d_2,\ldots,d_n\}
+\]
+
+Each document is divided into smaller text chunks:
+
+\[
+C = \{c_1,c_2,\ldots,c_m\}
+\]
+
+An embedding function converts each chunk into a vector:
+
+\[
+v_i = E(c_i)
+\]
+
+where:
+\begin{itemize}
+    \item $E$ represents the embedding function.
+    \item $c_i$ represents the $i^{th}$ text chunk.
+    \item $v_i$ represents its vector embedding.
+\end{itemize}
+
+Similarly, the user's query $q$ is converted into a vector:
+
+\[
+v_q = E(q)
+\]
+
+The similarity between the query and a document chunk can be calculated using cosine similarity:
+
+\[
+\operatorname{Similarity}(v_q,v_i)
+=
+\frac{v_q \cdot v_i}
+{\|v_q\|\|v_i\|}
+\]
+
+The top-$k$ most relevant chunks are selected:
+
+\[
+C_k = \operatorname{TopK}
+\left(
+\operatorname{Similarity}(v_q,v_i)
+\right)
+\]
+
+Finally, the language model generates a response using the query and retrieved context:
+
+\[
+A = LLM(q,C_k)
+\]
+
+where:
+\begin{itemize}
+    \item $q$ represents the user's query.
+    \item $C_k$ represents the retrieved context.
+    \item $A$ represents the generated answer.
+\end{itemize}
+
+\subsection{Components Used in RAG}
+
+\begin{itemize}
+    \item Document Loaders: Extract information from different document formats, including PDF, TXT, CSV, and web pages.
+    
+    \item Text Splitters: Divide documents into smaller chunks based on character count, token count, or semantic boundaries.
+    
+    \item Embedding Models: Convert textual data into numerical vectors that represent semantic meaning.
+    
+    \item Vector Databases: Store and retrieve embeddings using similarity-based search techniques. Examples include FAISS, Chroma, Pinecone, and Weaviate.
+    
+    \item Retriever: Searches the vector database and identifies the most relevant document chunks for a given query.
+    
+    \item Language Model: Uses the retrieved information to generate natural language responses.
+    
+    \item Prompt Template: Combines the user query and retrieved context into a structured prompt for the LLM.
+\end{itemize}
+
+\subsection{Types of RAG}
+
+\begin{itemize}
+    \item Naive RAG: Uses a basic retrieval and generation pipeline. Documents are divided into chunks, embedded, retrieved based on similarity, and supplied to the LLM.
+    
+    \item Advanced RAG: Improves retrieval quality using techniques such as query rewriting, metadata filtering, hybrid search, reranking, and contextual compression.
+    
+    \item Modular RAG: Uses independently configurable components that can be combined and optimized for different retrieval and generation requirements.
+\end{itemize}
+
+\subsection{RAG Optimization Techniques}
+
+\begin{itemize}
+    \item Chunk Size Optimization: Selects appropriate chunk sizes and overlaps to preserve contextual information and improve retrieval performance.
+    
+    \item Query Transformation: Rewrites or expands user queries to improve the retrieval of relevant documents.
+    
+    \item Hybrid Search: Combines keyword-based search and semantic vector search to improve information retrieval.
+    
+    \item Reranking: Reorders retrieved documents using a ranking model to prioritize the most relevant results.
+    
+    \item Metadata Filtering: Restricts document retrieval based on attributes such as document type, date, category, or department.
+    
+    \item Contextual Compression: Removes irrelevant information from retrieved documents before supplying the context to the LLM.
+    
+    \item Retrieval Evaluation: Measures retrieval quality using metrics such as Precision@K, Recall@K, and Mean Reciprocal Rank (MRR).
+\end{itemize}
+
+\subsection{Applications of RAG}
+
+\begin{itemize}
+    \item Educational Chatbots: Answers student queries using textbooks, lecture notes, and academic materials.
+    
+    \item Healthcare Assistants: Retrieves relevant information from medical guidelines, research publications, and healthcare documents to support information access.
+    
+    \item Enterprise Knowledge Management: Enables employees to search internal reports, policies, manuals, and organizational documents.
+    
+    \item Legal Document Analysis: Retrieves relevant clauses, regulations, and information from legal documents.
+    
+    \item Customer Support: Generates context-aware responses using product documentation, FAQs, and support knowledge bases.
+    
+    \item Research Assistants: Retrieves relevant information from research papers, technical reports, and scientific publications.
+\end{itemize}
+
+\subsection{Advantages and Limitations of RAG}
+
+\textbf{Advantages}
+\begin{itemize}
+    \item Provides access to external and domain-specific knowledge.
+    
+    \item Reduces dependence on the LLM's pre-trained knowledge.
+    
+    \item Allows knowledge bases to be updated without retraining the LLM.
+    
+    \item Improves response relevance by supplying retrieved contextual information.
+    
+    \item Supports private organizational knowledge sources when appropriately deployed and secured.
+\end{itemize}
+
+\textbf{Limitations}
+\begin{itemize}
+    \item Poor document quality or incorrect text extraction can affect retrieval accuracy.
+    
+    \item Improper chunking may result in the loss of important contextual information.
+    
+    \item Irrelevant retrieval results can lead to inaccurate generated responses.
+    
+    \item Embedding generation and vector database operations introduce additional computational costs.
+    
+    \item RAG does not completely eliminate hallucinations and requires appropriate retrieval and response evaluation.
+\end{itemize}
+
+
+%========================================================
+\section{Comparison of Prompt Engineering, LangChain, and RAG}
+%========================================================
+
+Prompt Engineering, LangChain, and RAG are complementary approaches used in Generative AI application development. Prompt Engineering improves the instructions given to an LLM, LangChain provides a framework for connecting different application components, and RAG enables the integration of external knowledge sources.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of Prompt Engineering, LangChain, and RAG}
+\label{tab:prompt_langchain_rag}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{3cm}|p{3.7cm}|p{3.7cm}|p{3.7cm}|}
+\hline
+\textbf{Parameter} & \textbf{Prompt Engineering} & \textbf{LangChain} & \textbf{RAG} \\
+\hline
+Definition & Designing effective instructions for LLMs & Framework for developing LLM applications & Combines retrieval with text generation \\
+\hline
+Primary Purpose & Improves response quality & Connects LLMs with tools and components & Provides external knowledge to LLMs \\
+\hline
+Main Components & Instructions, context, examples & Models, prompts, chains, tools, agents & Documents, embeddings, retrievers, vector stores \\
+\hline
+External Data & Can use provided context & Supports integration with external sources & Retrieves relevant external information \\
+\hline
+Main Application & Text generation and reasoning & AI application and agent development & Knowledge-based question answering \\
+\hline
+Example & Few-shot prompting & AI chatbot using LangChain & PDF-based question-answering system \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Integrated Application Development}
+
+Prompt Engineering, LangChain, and RAG can be combined to develop intelligent applications. For example, a document-based question-answering system can use LangChain to manage the application workflow, RAG to retrieve relevant information from documents, and Prompt Engineering to provide clear instructions to the LLM.
+
+The overall workflow can be represented as:
+
+\[
+\text{User Query}
+\rightarrow
+\text{Query Processing}
+\]
+
+\[
+\downarrow
+\]
+
+\[
+\text{RAG Retrieval}
+\rightarrow
+\text{Relevant Context}
+\]
+
+\[
+\downarrow
+\]
+
+\[
+\text{Prompt Construction}
+\rightarrow
+\text{LLM}
+\]
+
+\[
+\downarrow
+\]
+
+\[
+\text{Generated Response}
+\]
+This integrated approach enables the development of intelligent, context-aware, and domain-specific Generative AI applications.

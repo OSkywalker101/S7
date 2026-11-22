@@ -1,0 +1,62 @@
+\chapter{Experiments and Results}
+
+\section{Experimental Setup}
+The implemented system was evaluated on a small set of research papers retrieved from arXiv. For each selected paper, the pipeline performed PDF download, page/section-aware parsing, chunking, embedding generation, and indexing into a local vector store. Experiments were conducted using the configured LLM and embedding model through the application interface, focusing on three functionalities: summarization, citation-grounded question answering, and side-by-side comparison of two to three papers.
+
+\subsection{Evaluation Dataset}
+A manually curated set of queries was prepared to reflect typical research tasks, including:
+\begin{itemize}
+    \item Factual questions answerable from specific sections (e.g., methodology, dataset, results).
+    \item Summarization requests for individual papers.
+    \item Comparative questions requiring synthesis across two or three papers (e.g., differences in evaluation methods or reported performance).
+\end{itemize}
+The evaluation scale was intentionally limited, consistent with the project's scope and the soft-evaluation nature noted in the topic definition.
+
+\section{Evaluation Methodology}
+Since large-scale ground-truth annotations were not available, evaluation combined manual inspection with qualitative LLM-as-judge style criteria \cite{b13}.
+
+\subsection{Criteria}
+\begin{itemize}
+    \item \textbf{Relevance:} Whether the response addresses the user query or requested comparison aspect.
+    \item \textbf{Faithfulness/Groundedness:} Whether claims are supported by retrieved context from the source papers.
+    \item \textbf{Citation Quality:} Correctness and usefulness of cited section and page references for locating evidence.
+    \item \textbf{Summary Quality:} Coverage of key contributions, clarity, and conciseness.
+    \item \textbf{Comparison Quality:} Accuracy of aligned similarities/differences and completeness across selected papers.
+\end{itemize}
+
+\subsection{Scoring Approach}
+Responses can be rated on a simple ordinal scale (e.g., 1--5 or Low/Medium/High) per criterion. Where LLM-as-judge is used, a separate evaluation prompt assesses generated outputs against the retrieved evidence and the user query. Manual verification is recommended for citation checks by inspecting the referenced section/page in the original PDF.
+
+\section{Results and Observations}
+Table~\ref{tab:eval_results} provides a template for reporting evaluation outcomes. Actual scores can be populated based on recorded runs.
+
+\begin{table}[H]
+\centering
+\caption{Sample evaluation template for system outputs}
+\label{tab:eval_results}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{3.2cm}|p{2.2cm}|p{2.2cm}|p{2.4cm}|p{3.0cm}|}
+\hline
+\textbf{Task / Query Type} & \textbf{Relevance} & \textbf{Faithfulness} & \textbf{Citation Quality} & \textbf{Remarks} \\
+\hline
+Single-paper QA (factual) & TBD & TBD & TBD & To be filled from evaluation runs \\
+\hline
+Single-paper summarization & TBD & TBD & N/A or TBD & To be filled from evaluation runs \\
+\hline
+Two-paper comparison & TBD & TBD & TBD & To be filled from evaluation runs \\
+\hline
+Three-paper comparison & TBD & TBD & TBD & To be filled from evaluation runs \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Qualitative Observations}
+\begin{itemize}
+    \item \textbf{Citation-Grounded QA:} Metadata-aware retrieval enabled answers to include section and page references, improving traceability compared to generic responses. Citation usefulness depends on the accuracy of section detection during parsing.
+    \item \textbf{Summarization:} The system produced concise summaries capturing core problem statements and methods when relevant sections were successfully retrieved. Performance varied with PDF structure and chunk quality.
+    \item \textbf{Multi-Paper Comparison:} Structured prompts helped generate side-by-side contrasts across methodology and evaluation aspects for two to three papers. Comparisons were most reliable when sufficient evidence was retrieved for each paper on the same aspect.
+    \item \textbf{Error Cases:} Occasional issues included incomplete extraction from complex layouts, retrieval of partially relevant chunks, and generic phrasing when evidence was sparse. These cases highlight the need for stronger parsing and verification.
+\end{itemize}
+
+\section{Result Artifacts (To Be Added)}
+Screenshots of the implemented interface and sample outputs were not available during report preparation. Corresponding placeholders are provided in the Implementation chapter (Figures~\ref{fig:ui_paper_selection}--\ref{fig:ui_comparison}) and can be replaced with actual screenshots and annotated examples in future revisions.

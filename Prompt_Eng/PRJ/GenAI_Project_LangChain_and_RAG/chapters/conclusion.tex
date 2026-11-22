@@ -1,0 +1,15 @@
+\chapter{Conclusion and Future Scope}
+
+\section{Conclusion}
+This project implemented an AI-based research paper summarization and question answering system using a Retrieval-Augmented Generation (RAG) approach. By integrating arXiv paper retrieval, PDF parsing with structural metadata, vector-based semantic search, and LLM-driven generation, the system enables users to efficiently explore and understand research literature. The inclusion of exact section and page citations enhances transparency and verifiability of generated answers, while the side-by-side comparison feature supports systematic analysis of two to three papers across key research dimensions. Overall, the system demonstrates a practical alternative to generic PDF chatbots by providing evidence-grounded, research-oriented assistance, with evaluation guided by manually curated queries and qualitative judging criteria.
+
+\section{Future Scope}
+The system can be extended and improved in several directions:
+\begin{itemize}
+    \item \textbf{Improved Document Parsing:} Incorporate advanced PDF/layout parsing tools to better handle tables, figures, equations, and multi-column formats, and to increase section detection accuracy.
+    \item \textbf{Citation Verification:} Add automated checks to validate that generated citations map to retrieved evidence and source text locations.
+    \item \textbf{Enhanced Retrieval Quality:} Explore hybrid search, reranking, query rewriting, and better chunking strategies to improve relevance and coverage.
+    \item \textbf{Robust Evaluation:} Develop a larger benchmark question set with ground-truth annotations and standardized metrics for faithfulness, citation accuracy, and comparison quality.
+    \item \textbf{Scalability and Persistence:} Support larger corpora, incremental indexing, caching, and efficient storage for repeated use.
+    \item \textbf{User Experience:} Add exportable summaries/comparisons, saved sessions, richer UI visualizations, and inclusion of screenshots/user feedback mechanisms for iterative improvement.
+\end{itemize}

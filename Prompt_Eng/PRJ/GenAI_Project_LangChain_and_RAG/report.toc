@@ -1,0 +1,76 @@
+\contentsline {chapter}{Abstract}{ii}{Doc-Start}%
+\contentsline {chapter}{List of Figures}{iv}{chapter*.1}%
+\contentsline {chapter}{List of Tables}{v}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Generative AI Applications}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Prompt Engineering}{1}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Key Components of a Prompt}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Types of Prompting Techniques}{2}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Advanced Prompt Engineering Techniques}{2}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Prompt Design Strategies}{3}{subsection.1.1.4}%
+\contentsline {subsection}{\numberline {1.1.5}Applications of Prompt Engineering}{4}{subsection.1.1.5}%
+\contentsline {section}{\numberline {1.2}LangChain Framework}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Key Features of LangChain}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Core Components of LangChain}{5}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}LangChain Expression Language (LCEL)}{6}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Chains in LangChain}{6}{subsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.2.5}Memory and Chat History}{7}{subsection.1.2.5}%
+\contentsline {subsection}{\numberline {1.2.6}AI Agents and Tool Calling}{7}{subsection.1.2.6}%
+\contentsline {subsection}{\numberline {1.2.7}Applications of LangChain}{8}{subsection.1.2.7}%
+\contentsline {section}{\numberline {1.3}Retrieval-Augmented Generation (RAG)}{9}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Need for RAG}{9}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Architecture of RAG}{10}{subsection.1.3.2}%
+\contentsline {subsubsection}{1. Indexing Phase}{10}{section*.3}%
+\contentsline {subsubsection}{2. Retrieval and Generation Phase}{10}{section*.4}%
+\contentsline {subsection}{\numberline {1.3.3}Mathematical Representation of RAG}{11}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Components Used in RAG}{12}{subsection.1.3.4}%
+\contentsline {subsection}{\numberline {1.3.5}Types of RAG}{13}{subsection.1.3.5}%
+\contentsline {subsection}{\numberline {1.3.6}RAG Optimization Techniques}{13}{subsection.1.3.6}%
+\contentsline {subsection}{\numberline {1.3.7}Applications of RAG}{14}{subsection.1.3.7}%
+\contentsline {subsection}{\numberline {1.3.8}Advantages and Limitations of RAG}{14}{subsection.1.3.8}%
+\contentsline {section}{\numberline {1.4}Comparison of Prompt Engineering, LangChain, and RAG}{15}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Integrated Application Development}{16}{subsection.1.4.1}%
+\contentsline {chapter}{\numberline {2}Project Introduction and Literature Review}{17}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Problem Statement}{17}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Objectives}{17}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Scope}{18}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Limitations and Assumptions}{18}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Proposed and Implemented System Overview}{19}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Literature Review}{19}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Retrieval-Augmented Generation for Question Answering}{19}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Scientific Paper Summarization and Long-Document Understanding}{20}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Citation-Grounded and Evidence-Based Responses}{20}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Multi-Document Comparison}{20}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Tools and Frameworks}{20}{subsection.2.6.5}%
+\contentsline {section}{\numberline {2.7}Summary}{21}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Project Workflow}{22}{chapter.3}%
+\contentsline {section}{\numberline {3.1}System Architecture}{22}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Architecture Components}{22}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Data Flow}{23}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Citation and Comparison Design}{24}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Software Requirements}{24}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Hardware Requirements}{25}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Implementation}{26}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Implementation Overview}{26}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Module-wise Implementation}{26}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Paper Acquisition using arXiv API}{26}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}PDF Parsing and Document Structuring}{26}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Chunking and Metadata Enrichment}{27}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Embedding Generation and Vector Indexing}{27}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Retrieval Pipeline}{27}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Summarization Module}{27}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Question Answering with Section/Page Citations}{28}{subsection.4.2.7}%
+\contentsline {subsection}{\numberline {4.2.8}Side-by-Side Comparison of Two to Three Papers}{28}{subsection.4.2.8}%
+\contentsline {subsection}{\numberline {4.2.9}User Interface Workflow}{28}{subsection.4.2.9}%
+\contentsline {section}{\numberline {4.3}Screenshot Provisions}{29}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Experiments and Results}{31}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Experimental Setup}{31}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Evaluation Dataset}{31}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Evaluation Methodology}{32}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Criteria}{32}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Scoring Approach}{32}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Results and Observations}{32}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Qualitative Observations}{33}{subsection.5.3.1}%
+\contentsline {section}{\numberline {5.4}Result Artifacts (To Be Added)}{34}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Scope}{35}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{35}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Scope}{35}{section.6.2}%

@@ -1,0 +1,59 @@
+\chapter{Project Introduction and Literature Review}
+
+\section{Problem Statement}
+The volume of research papers published on platforms such as arXiv continues to grow rapidly, making it difficult for students and researchers to identify relevant work, extract key contributions, and compare findings across multiple studies. Traditional keyword search provides limited semantic understanding, while manually reading full papers is time-consuming. Generic PDF chatbots often lack document structure awareness and do not provide verifiable evidence for generated answers. There is a need for an intelligent system that can retrieve, summarize, and answer questions over research papers while grounding responses in specific document locations and enabling systematic comparison of multiple papers.
+
+\section{Objectives}
+The main objectives of the project are:
+\begin{itemize}
+    \item To retrieve research papers and metadata using the arXiv API.
+    \item To parse PDF documents into structured content while preserving section and page information.
+    \item To implement a Retrieval-Augmented Generation (RAG) pipeline for semantic retrieval over paper content.
+    \item To generate concise summaries of individual research papers.
+    \item To provide question answering with responses that cite the exact section and page from which information is derived.
+    \item To support side-by-side comparison of two to three papers across aspects such as problem statement, methodology, datasets, evaluation, results, and limitations.
+    \item To evaluate the system using a small manually curated question set and/or LLM-as-judge criteria.
+\end{itemize}
+
+\section{Scope}
+The scope of the system includes:
+\begin{itemize}
+    \item Ingestion of research papers available on arXiv in PDF format.
+    \item Extraction of textual content along with metadata such as title, authors, sections, and page numbers where detectable.
+    \item Chunking, embedding, and indexing of paper content in a vector store for similarity-based retrieval.
+    \item User interactions for paper selection, summarization, question answering, and multi-paper comparison through a lightweight interface.
+    \item Generation of evidence-grounded outputs with section/page citations and structured comparison views for two to three selected papers.
+\end{itemize}
+
+\section{Limitations and Assumptions}
+\begin{itemize}
+    \item PDF parsing quality depends on document layout; complex tables, equations, figures, and multi-column formats may not be perfectly extracted.
+    \item Section detection is based on heuristics and may vary across paper templates.
+    \item The quality of retrieval and generation depends on the chosen embedding model, chunking strategy, and Large Language Model (LLM).
+    \item Although citation grounding is enforced through metadata-aware prompting, LLM outputs may still contain errors and require verification against source text.
+    \item Evaluation is soft and limited in scale, relying on a small curated question set and/or LLM-as-judge scoring rather than a large standardized benchmark.
+    \item The current implementation does not include captured UI screenshots in this report; provisions are included for adding them later.
+\end{itemize}
+
+\section{Proposed and Implemented System Overview}
+The implemented system follows a modular RAG-based workflow. Users search or specify papers from arXiv, after which the system downloads PDFs and extracts page-wise text. Extracted content is segmented into chunks enriched with metadata (paper identifier, title, section heading, and page number), converted into vector embeddings, and stored in a vector database. For summarization and question answering, relevant chunks are retrieved and provided as context to an LLM through structured prompts. The QA module returns answers with explicit section and page citations, while the comparison module retrieves evidence from two to three selected papers and produces a side-by-side analysis of key research dimensions.
+
+\section{Literature Review}
+
+\subsection{Retrieval-Augmented Generation for Question Answering}
+Retrieval-Augmented Generation (RAG) combines parametric knowledge in language models with non-parametric retrieval from external corpora \cite{b8}. By retrieving relevant passages at inference time, RAG systems can improve factual grounding and adapt to domain-specific or updated information without retraining the base model \cite{b9}. This makes RAG suitable for document-based question answering over research papers.
+
+\subsection{Scientific Paper Summarization and Long-Document Understanding}
+Summarizing scientific articles is challenging due to their length, technical vocabulary, and structured organization (abstract, methods, experiments, results). Prior work on scientific summarization highlights the importance of identifying salient contributions and preserving discourse structure. In practical systems, combining document parsing with retrieval and abstractive generation enables scalable summarization while focusing on relevant sections of long papers.
+
+\subsection{Citation-Grounded and Evidence-Based Responses}
+A key limitation of generic LLM applications is the difficulty of verifying generated claims. Grounding responses in retrieved context and exposing source attributions improves transparency and user trust. For research assistance, fine-grained attribution such as section names and page numbers is particularly valuable, as it allows users to quickly locate and validate the original evidence within a paper.
+
+\subsection{Multi-Document Comparison}
+Comparing multiple research papers requires aligning information across documents along common dimensions such as objectives, methodology, datasets, metrics, and results. Retrieval-based pipelines can gather relevant evidence per document, while structured prompting can present differences and similarities in tabular or bullet form. This is more informative than isolated single-document summaries when users need to understand the research landscape.
+
+\subsection{Tools and Frameworks}
+LangChain provides abstractions for building LLM applications, including document loaders, text splitters, embeddings, vector stores, retrievers, and prompt chains \cite{b5,b6,b7}. Vector libraries such as FAISS and Chroma enable efficient similarity search over embedded chunks \cite{b10,b11}. The arXiv API supports programmatic access to paper metadata and PDF links \cite{b12}, facilitating automated corpus construction for research-focused RAG systems.
+
+\section{Summary}
+The literature indicates that RAG-based approaches, combined with structured document processing and source attribution, are effective for knowledge-intensive tasks. Building on these foundations, this project integrates arXiv ingestion, section/page-aware indexing, citation-grounded QA, and multi-paper comparison to address the limitations of generic PDF chat systems in academic research workflows.

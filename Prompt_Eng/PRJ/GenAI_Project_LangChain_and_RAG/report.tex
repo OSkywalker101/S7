@@ -1,0 +1,123 @@
+
+
+
+\documentclass[12pt,a4paper,openright,oneside,onecolumn]{report}
+\usepackage{multirow}
+\usepackage{setspace}
+\usepackage{afterpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[ruled,vlined,linesnumbered,resetcount,algochapter]{algorithm2e}
+\usepackage{fancyhdr}
+\thispagestyle{plain}{}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=red,
+	filecolor=blue,
+	linkcolor=black,
+	urlcolor=red
+}
+
+\newcommand\blankpage{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
+	
+\usepackage[left=1.25in,right=1in,top=0.5in,bottom=0.75in]{geometry}
+
+%\usepackage[left=2cm,right=2cm,top=2cm]{geometry}
+
+\begin{document}
+\begin{titlepage}
+\newgeometry{top=0.5in,bottom=1in,right=0.5in,left=0.5in}
+ \includegraphics[width=25em]{figures/ritlogo.png}
+    \begin{center}
+        \vspace{0.1cm} 
+      \Large \textbf{Project Title}\\
+        \vspace{1.2cm}
+        \textbf{A report on} \\
+         \vspace{0.5cm}
+           \textbf{Building Intelligent Applications Using LangChain and RAG}
+          \vspace{0.5cm}\\
+        {As partial fulfillment of the requirement for the Course \\Prompt Engineering for GenAI (23CI72)}\\
+        \vspace{0.4cm}
+        \large \textbf{Bachelor of Engineering CSE(AI\&ML)}\\
+        \vspace{0.4cm}
+        \large \textbf{By}\\
+        \setlength{\tabcolsep}{4em}
+	\vspace{0.8cm}
+	\begin{tabular}{l    r}\vspace{0.3cm}
+	Oliver Jude & 1MS23CI080\\\vspace{0.3cm}
+	Sanakki Vivekanada & 1MS23CI118\\\vspace{0.3cm}
+    Vigyant Nayak & 1MS23CI131\\
+	\end{tabular}	
+	
+	\vspace{0.5cm}
+	 {Under the Guidance of}\\
+	\vspace{0.2cm}
+	\large {Dr.~Ramayashree}\\
+	\vspace{0.2cm}
+	 {Associate Professor}\\
+	\vspace{0.6cm}
+	%\begin{figure}[!htb]
+	%	\centering
+	%	\includegraphics[width=0.5\textwidth]{figures/ritlogo.png}\\	
+	%\end{figure}
+	 \textbf{\uppercase{Department of CSE(AI \& ML)}}\\
+	\vspace{0.2cm}
+	 \large {RAMAIAH INSTITUTE OF TECHNOLOGY }\\
+	 \small{(Autonomous Institute, Affiliated to VTU)}\\
+	 {BANGALORE - 54}\\
+	\vspace{1.0cm}
+	\small {December 2026}\\
+	\vspace{0.5cm}
+    \end{center}
+   
+\end{titlepage}
+\pagenumbering{roman}
+\include{preamble/certificate/certi.tex}
+\newpage
+\include{preamble/declaration/dec.tex}
+\newpage
+\begin{spacing}{1.5}
+\addcontentsline{toc}{chapter}{Abstract}
+\include{preamble/abstract/abs.tex}
+\newpage
+\include{preamble/acknowledgement/ack.tex}
+\newpage
+\tableofcontents
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Tables}
+
+\clearpage
+\pagenumbering{arabic}
+
+\include{chapters/introduction.tex}
+%\pagenumbering{arabic}
+\input{chapters/literature.tex}
+%\input{chapters/requirement_specification.tex}
+\include{chapters/FrameworkandDesign.tex}
+\include{chapters/implementation.tex}
+\include{chapters/Experiments_Results}
+\include{chapters/conclusion.tex}
+\input{references.tex}
+
+
+
+
+%\bibliographystyle{plain}
+
+%\usepackage[numbers]{natbib}
+%\usepackage{notoccite}
+%\bibliographystyle{agsmemph}
+%\bibliography{references/references}
+\end{spacing}
+\end{document}
